@@ -14,8 +14,9 @@ fun addBookIntoLibrary(){
         println("Chọn loại sách muốn thêm:")
         println("1. Sách giấy")
         println("2. Sách điện tử")
-        input = readlnOrNull()?.toIntOrNull()
-        if(input == null || (input != 1 && input != 2)) {
+        //safe-call và non-nullable 
+        input = readlnOrNull()?.toIntOrNull()!!
+        if(input != 1 && input != 2) {
             println("Lựa chọn không hợp lệ! Vui lòng chọn lại.")
         }
 
@@ -170,6 +171,8 @@ fun printMenu() {
     println("0. Thoát chương trình")
     print("Nhập lựa chọn của bạn: ")
 }
+
+
 fun main() {
 
     var running = true

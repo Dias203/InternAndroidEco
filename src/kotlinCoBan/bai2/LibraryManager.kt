@@ -5,6 +5,7 @@ class LibraryManager {
     private val users = mutableListOf<User>()
     private val borrowedBooks = mutableMapOf<String, MutableList<String>>() // đánh dấu danh sách sách người dùng mượn
 
+    //function
     fun addBook(book: Book) {
         books.add(book)
         println("Thêm sách thành công!")
@@ -21,13 +22,13 @@ class LibraryManager {
 
     fun displayBooks() {
         println("=== Danh sách sách (${books.size} cuốn) ===")
-        if(books.isEmpty()) {
+        if (books.isEmpty()) {
             println("Không có sách trong thư viện!")
             return
         }
 
         for (item in books) {
-            println(item.toString())
+            println(item.toString()) // Sử dụng extension function display()
         }
     }
 
@@ -42,11 +43,10 @@ class LibraryManager {
         }
     }
 
-
+    // nullable
     private fun findBookById(bookId: String) : Book? {
         return books.find { it.id == bookId }
     }
-
 
     fun searchBookByTile(title: String) : List<Book>{
         val result = books.filter {
@@ -65,7 +65,6 @@ class LibraryManager {
     private fun findUserById(userId: String) : User? {
         return users.find { it.id == userId } //trả về phần tử đầu tiên thỏa mãn hoặc null nếu không thấy
     }
-
 
     fun findUserByName(userName: String) : List<User> {
         val result = users.filter {
@@ -93,22 +92,8 @@ class LibraryManager {
             return false
         }
 
-        // Kiểm tra sách được mượn bởi người nào chưa
-        // nếu đã tồn tại key = userId thì sẽ get value là 1 danh sách sách đã mượn
-        // nếu chưa tồn tại thì sẽ thêm cặp key - value là userId - list trống
-        // getOrPut chỉ trả về giá trị value <=> mutableList
-        val userBorrowedBooks = borrowedBooks.getOrPut(userId) { mutableListOf()}
-        // kiểm tra nếu chứa Id sách muốn mượn trong list
-        if(userBorrowedBooks.contains(bookId)) {
-            println("Lỗi: ${user.name} đã mượn sách ${book.title} rồi!")
-            return false
-        }
-        // nếu chưa tồn tại thì add vào list
-        userBorrowedBooks.add(bookId)
-        println("${user.name} đã mượn sách ${book.title} thành công!")
-        return true
+        return borrowedBooks.borrowBook(userId, bookId, user, book)
     }
-
 
     // Phương thức trả sách
     fun returnBook(userId: String, bookId: String) : Boolean {
@@ -124,18 +109,7 @@ class LibraryManager {
             return false
         }
 
-        // Kiểm tra người dùng có mượn sách hay không
-        val userBorrowedBooks = borrowedBooks[userId]
-        // Chưa tồn tại userId hoặc chưa chứa bookId
-        if(userBorrowedBooks == null || !userBorrowedBooks.contains(bookId)){
-            println("Lỗi: ${user.name} chưa mượn sách ${book.title}!")
-            return false
-        }
-
-        // Nếu người dùng có mượn -> Xóa khỏi list sách đã mượn
-        userBorrowedBooks.remove(bookId)
-        println("${user.name} đã trả sách ${book.title} thành công!")
-        return true
+        return borrowedBooks.returnBook(userId, bookId, user, book)
     }
 
     fun displayBorrowedBooks(userId: String) {
@@ -143,14 +117,15 @@ class LibraryManager {
 
         if(user == null) {
             println("Lỗi: Không tìm thấy người dùng")
+            return
         }
 
         //lấy danh sách đã mượn của userId, null nếu không tìm thấy userId
         val userBorrowedBooks = borrowedBooks[userId]
 
-        println("=== SÁCH ĐÃ MƯỢN CỦA ${user?.name} ===")
+        println("=== SÁCH ĐÃ MƯỢN CỦA ${user.name} ===")
         if (userBorrowedBooks.isNullOrEmpty()) {
-            println("${user?.name} chưa mượn sách nào.")
+            println("${user.name} chưa mượn sách nào.")
             return
         }
 
@@ -162,8 +137,38 @@ class LibraryManager {
         borrowedBooksList.forEachIndexed { index, book ->
             println("${index + 1} - $book")
         }
+    }
+}
 
+// Extension functions
+fun MutableMap<String, MutableList<String>>.borrowBook(userId: String, bookId: String, user: User, book: Book): Boolean {
+    // Kiểm tra sách được mượn bởi người nào chưa
+    // nếu đã tồn tại key = userId thì sẽ get value là 1 danh sách sách đã mượn
+    // nếu chưa tồn tại thì sẽ thêm cặp key - value là userId - list trống
+    // getOrPut chỉ trả về giá trị value <=> mutableList
+    val userBorrowedBooks = this.getOrPut(userId) { mutableListOf() }
+
+    // kiểm tra nếu chứa Id sách muốn mượn trong list
+    if (userBorrowedBooks.contains(bookId)) {
+        println("Lỗi: ${user.name} đã mượn sách ${book.title} rồi!")
+        return false
     }
 
+    // nếu chưa tồn tại thì add vào list
+    userBorrowedBooks.add(bookId)
+    println("${user.name} đã mượn sách ${book.title} thành công!")
+    return true
+}
 
+fun MutableMap<String, MutableList<String>>.returnBook(userId: String, bookId: String, user: User, book: Book): Boolean {
+    val userBorrowedBooks = this[userId]
+
+    if (userBorrowedBooks == null || !userBorrowedBooks.contains(bookId)) {
+        println("Lỗi: ${user.name} chưa mượn sách ${book.title}!")
+        return false
+    }
+
+    userBorrowedBooks.remove(bookId)
+    println("${user.name} đã trả sách ${book.title} thành công!")
+    return true
 }

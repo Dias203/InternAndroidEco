@@ -1,5 +1,6 @@
 package kotlinCoBan.bai2
 
+// class, inheritance
 class EBook(
     title: String,
     author: String,
@@ -8,9 +9,11 @@ class EBook(
     private val sizeMB: Double
 ) : Book(title, author, year, genre) {
 
+    // override function
     override fun getType() = "Sách điện tử"
 
     override fun toString(): String {
         return "${super.toString()} - kích thước: $sizeMB MB"
     }
+
 }

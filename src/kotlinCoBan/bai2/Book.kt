@@ -24,4 +24,5 @@ abstract class Book(
     override fun toString(): String {
         return "[$id] - $title - $author - $year - $genre - ${getType()}"
     }
+
 }
