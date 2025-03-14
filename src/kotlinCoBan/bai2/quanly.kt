@@ -34,6 +34,25 @@ fun addBookIntoLibrary() {
             library.addBook(book)
         }
     }
+    else{
+        print("Nhập tên sách: ")
+        val title = readlnOrNull()
+        print("Nhập tên tác giả: ")
+        val author = readlnOrNull()
+        print("Nhập năm xuất bản: ")
+        val year = readlnOrNull()?.toIntOrNull()
+        print("Nhập thể loại sách: ")
+        val genre = readlnOrNull()
+        print("Nhập kích thước (MB) của sách: ")
+        val sizeMB = readlnOrNull()?.toDoubleOrNull()
+
+        if (title.isNullOrBlank() || author.isNullOrBlank() || genre.isNullOrBlank() || year == null || sizeMB == null) {
+            println("Lỗi: Vui lòng nhập đầy đủ và chính xác thông tin sách.")
+        } else {
+            val book = EBook(title, author, year, genre, sizeMB)
+            library.addBook(book)
+        }
+    }
 }
 
 fun addUserIntoSystem() {

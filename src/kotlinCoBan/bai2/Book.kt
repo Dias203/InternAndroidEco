@@ -3,9 +3,9 @@ package kotlinCoBan.bai2
 // abstract class
 abstract class Book(
     val title: String,
-    val author: String,
-    val year: Int,
-    val genre: String,
+    private val author: String,
+    private val year: Int,
+    private val genre: String,
     val id : String = generateId()
 ) {
     // companion object
