@@ -1,26 +1,19 @@
 package kotlinCoBan.bai2
 
-import kotlinCoBan.bai1.Student
-import kotlinCoBan.bai1.StudentData.listStudent
+val library = BorrowManager() // Sử dụng BorrowManager thay vì LibraryManager
 
-val library = LibraryManager()
-
-fun addBookIntoLibrary(){
-
-    var input : Int?
+fun addBookIntoLibrary() {
+    var input: Int?
 
     do {
-
         println("Chọn loại sách muốn thêm:")
         println("1. Sách giấy")
         println("2. Sách điện tử")
-        //safe-call và non-nullable 
-        input = readlnOrNull()?.toIntOrNull()!!
-        if(input != 1 && input != 2) {
+        input = readlnOrNull()?.toIntOrNull()
+        if (input != null && input != 1 && input != 2) {
             println("Lựa chọn không hợp lệ! Vui lòng chọn lại.")
         }
-
-    }while (input == null || (input != 1 && input != 2))
+    } while (input == null || (input != 1 && input != 2))
 
     if (input == 1) {
         print("Nhập tên sách: ")
@@ -28,20 +21,17 @@ fun addBookIntoLibrary(){
         print("Nhập tên tác giả: ")
         val author = readlnOrNull()
         print("Nhập năm xuất bản: ")
-        val year = readlnOrNull()?.toIntOrNull() // Chuyển đổi sang Int?
+        val year = readlnOrNull()?.toIntOrNull()
         print("Nhập thể loại sách: ")
         val genre = readlnOrNull()
         print("Nhập số trang: ")
-        val page = readlnOrNull()?.toIntOrNull() // Chuyển đổi sang Int?
+        val page = readlnOrNull()?.toIntOrNull()
 
-        // Kiểm tra dữ liệu nhập
         if (title.isNullOrBlank() || author.isNullOrBlank() || genre.isNullOrBlank() || year == null || page == null) {
             println("Lỗi: Vui lòng nhập đầy đủ và chính xác thông tin sách.")
         } else {
-            // Tạo và thêm sách
             val book = PhysicalBook(title, author, year, genre, page)
             library.addBook(book)
-
         }
     }
 }
@@ -54,7 +44,7 @@ fun addUserIntoSystem() {
         print("Nhập email người dùng: ")
         val email = readlnOrNull()
 
-        isValid = true // Giả định là dữ liệu hợp lệ
+        isValid = true
 
         if (name.isNullOrBlank() || email.isNullOrBlank()) {
             println("Lỗi: Vui lòng nhập đầy đủ thông tin!")
@@ -67,45 +57,39 @@ fun addUserIntoSystem() {
             isValid = false
         }
 
-        // Thêm người dùng nếu hợp lệ
         if (isValid) {
             val user = User(User.generateId(), name!!, email!!)
             library.addUser(user)
             println("Người dùng '${user.name}' đã được thêm thành công!")
         }
-    } while (!isValid) // Lặp lại nếu dữ liệu không hợp lệ
+    } while (!isValid)
 }
-
 
 fun findUserByName() {
     do {
         print("Nhập tên người dùng: ")
         val userName = readlnOrNull()
 
-        if(userName.isNullOrBlank()) {
+        if (userName.isNullOrBlank()) {
             println("Lỗi: Vui lòng nhập đầy đủ thông tin!")
-        }
-        else {
-            library.findUserByName(userName).toString()
+        } else {
+            library.findUserByName(userName) // Không cần toString(), hàm đã in kết quả
         }
     } while (userName.isNullOrBlank())
 }
-
 
 fun findBookByTitle() {
     do {
         print("Nhập tên sách: ")
         val bookTitle = readlnOrNull()
 
-        if(bookTitle.isNullOrBlank()) {
+        if (bookTitle.isNullOrBlank()) {
             println("Lỗi: Vui lòng nhập đầy đủ thông tin!")
-        }
-        else {
-            library.searchBookByTile(bookTitle).toString()
+        } else {
+            library.searchBookByTile(bookTitle) // Không cần toString(), hàm đã in kết quả
         }
     } while (bookTitle.isNullOrBlank())
 }
-
 
 fun displayBooks() {
     library.displayBooks()
@@ -157,6 +141,7 @@ fun displayBorrowedBooks() {
         }
     } while (userID.isNullOrBlank())
 }
+
 fun printMenu() {
     println("\n===== HỆ THỐNG QUẢN LÝ THƯ VIỆN =====")
     println("1. Thêm sách mới")
@@ -172,9 +157,7 @@ fun printMenu() {
     print("Nhập lựa chọn của bạn: ")
 }
 
-
 fun main() {
-
     var running = true
 
     while (running) {
@@ -202,7 +185,6 @@ fun main() {
             }
         }
 
-        // Nếu chương trình vẫn đang chạy, chờ người dùng nhấn Enter để tiếp tục
         if (running) {
             println("\nNhấn Enter để tiếp tục...")
             readlnOrNull()
@@ -211,4 +193,3 @@ fun main() {
 
     println("Cảm ơn bạn đã sử dụng hệ thống quản lý thư viện!")
 }
-
