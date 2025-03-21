@@ -1,14 +1,14 @@
-package kotlinCoBan.bai1
+package com.example.interneco.task1
 
 object StudentData {
     val listStudent =  listOf(
-        Student(1, "Nguyen Van A", 19, 8.5f, 'M', true),
+        Student(1, "Nguyen Van A", 19, null, 'M', true),
         Student(2, "Tran Thi B", 22, 6.2f, 'F', false),
         Student(3, "Le Van C", 17, 9.0f, 'M', true),
-        Student(4, "Pham Thi D", 21, 5.5f, 'F', false),
+        Student(4, "Pham Thi D", 21, null, 'F', false),
         Student(5, "Hoang Van E", 20, 7.8f, 'M', false),
         Student(6, "Nguyen Thi F", 23, 8.9f, 'F', true),
-        Student(7, "Do Van G", 18, 6.7f, 'M', false),
+        Student(7, "Do Van G", 18, null, 'M', false),
         Student(8, "Pham Van H", 19, 9.2f, 'M', true),
         Student(9, "Le Thi I", 20, 6.9f, 'F', false),
         Student(10, "Vu Van J", 22, 8.0f, 'M', true),
