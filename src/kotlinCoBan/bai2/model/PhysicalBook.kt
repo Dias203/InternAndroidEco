@@ -1,11 +1,11 @@
-package kotlinCoBan.bai2
+package kotlinCoBan.bai2.model
 
 class PhysicalBook(
     title: String,
     author: String,
     year: Int,
     genre: String,
-    private val page: Int
+    var page: Int
 ) : Book(title, author, year, genre) {
 
     override fun getType() = "Sách giấy"

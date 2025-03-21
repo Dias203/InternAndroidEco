@@ -1,4 +1,4 @@
-package kotlinCoBan.bai2
+package kotlinCoBan.bai2.model
 
 // class, inheritance
 class EBook(
@@ -6,7 +6,7 @@ class EBook(
     author: String,
     year: Int,
     genre: String,
-    private val sizeMB: Double
+    var sizeMB: Double
 ) : Book(title, author, year, genre) {
 
     // override function
