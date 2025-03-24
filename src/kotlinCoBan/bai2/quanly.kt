@@ -11,9 +11,12 @@ fun main() {
     // Khởi tạo các đối tượng manager
     val bookManager = BookManager()
     val userManager = UserManager()
-    val borrowManager = BorrowManager().apply {
-        setManagers(bookManager, userManager)
+
+    // lazy
+    val borrowManager by lazy {
+        BorrowManager(bookManager, userManager)
     }
+
 
     // Khởi tạo các handler và thiết lập tham chiếu đến các manager
     val bookHandler = BookHandler().apply {

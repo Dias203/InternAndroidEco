@@ -17,6 +17,9 @@ object Menu {
         println("6. Xóa sách")
         println("7. Mượn sách")
         println("8. Trả sách")
+        println("9. Tổng số sách đang được mượn")
+        println("10. Sắp xếp danh sách sách theo năm xuất bản")
+        println("11. Lọc danh sách sách")
         println("0. Thoát chương trình")
         print("Nhập lựa chọn của bạn: ")
     }

@@ -9,11 +9,6 @@ class BorrowManager(
 ) : LibraryManager {
     private val borrowedBooks = mutableMapOf<String, MutableList<String>>()
 
-    fun setManagers(bookManager: BookManager, userManager: UserManager) {
-        this.bookManager = bookManager
-        this.userManager = userManager
-    }
-
     override fun borrowBook(userId: String, bookId: String) {
         val user = userManager.findUserById(userId) ?: return println("Lỗi: Không tìm thấy người dùng với ID: $userId!")
         val book = bookManager.findBookById(bookId) ?: return println("Lỗi: Không tìm thấy sách với ID: $bookId!")

@@ -1,5 +1,6 @@
 package kotlinCoBan.bai2.system.handler
 
+import kotlinCoBan.bai2.model.Book
 import kotlinCoBan.bai2.model.EBook
 import kotlinCoBan.bai2.model.PhysicalBook
 import kotlinCoBan.bai2.system.manager.BookManager
@@ -25,7 +26,7 @@ class BookHandler {
             val bookChoice = readlnOrNull()?.toIntOrNull()
 
             when (bookChoice) {
-                1 -> addBookIntolibraryManager()
+                1 -> addBookIntoLibraryManager()
                 2 -> updateBook()
                 3 -> findBookByTitle()
                 5 -> displayBooks()
@@ -33,13 +34,15 @@ class BookHandler {
                 7 -> borrowBook()
                 8 -> returnBook()
                 9 -> getTotalBorrowedBooks()
+                10 -> sortBooks2()
+                11 -> filterBooks()
                 0 -> inBookMenu = false
                 else -> println("Lựa chọn không hợp lệ!")
             }
         }
     }
 
-    private fun addBookIntolibraryManager() {
+    private fun addBookIntoLibraryManager() {
         var input: Int?
 
         do {
@@ -187,7 +190,7 @@ class BookHandler {
                     }
                 } while (newPages == null)
 
-                bookManager.updatePhysicalBook(bookID, newYear, newPages)
+                bookManager.updatePhysicalBookWithCoroutine(bookID, newYear, newPages)
             }
             else -> {
                 // Nhập và kiểm tra kích thước
@@ -203,7 +206,7 @@ class BookHandler {
                     }
                 } while (newSize == null)
 
-                bookManager.updateEBook(bookID, newYear, newSize)
+                bookManager.updateEBookWithCoroutine(bookID, newYear, newSize)
             }
         }
         println("Cập nhật sách thành công!")
@@ -220,16 +223,51 @@ class BookHandler {
             return
         }
 
-        val success = bookManager.deleteBook(bookID)
-        if (success) {
-            println("Xóa sách thành công!")
-        } else {
-            println("Không thể xóa sách với ID: $bookID (Sách không tồn tại hoặc đang được mượn)")
-        }
+        bookManager.deleteWithCoroutine(bookID)
     }
 
     private fun getTotalBorrowedBooks() {
         val result = borrowManager.getTotalBorrowedBooks()
         println("Tổng số sách đang được mượn là: $result")
+    }
+
+
+    /*
+    // Kotlin Reflection
+    private fun sortBooks() {
+        // Sắp xếp theo year, nếu bằng thì theo title dùng reflection
+        bookManager.displayBooks { book1, book2 ->
+            val yearComparison = Book::year.get(book1) - Book::year.get(book2)
+            if (yearComparison != 0) yearComparison
+            else Book::title.get(book1).compareTo(Book::title.get(book2))
+        }
+    }
+
+     */
+
+    // Comparator
+    private fun sortBooks2() {
+        // Tạo Comparator: year -> title -> sizeMB (EBook) hoặc pages (PhysicalBook)
+        val customComparator: Comparator<Book> = compareBy<Book> { Book::year.get(it) }
+            .thenBy { Book::title.get(it) }
+            .thenBy { book ->
+                when (book) {
+                    is EBook -> book.sizeMB // Sắp xếp theo sizeMB cho EBook
+                    is PhysicalBook -> book.page // Chuyển pages thành Double cho PhysicalBook
+                    else -> 0.0 // Trường hợp mặc định (nếu có loại sách khác)
+                }
+            }
+
+        // Sử dụng Comparator trong displayBooks
+        bookManager.displayBooks { book1, book2 ->
+            customComparator.compare(book1, book2)
+        }
+    }
+
+    private fun filterBooks() {
+        bookManager.filterBooks(
+            {book: Book -> book is PhysicalBook },
+            {book: Book -> (book as PhysicalBook).page > 300 }
+        )
     }
 }

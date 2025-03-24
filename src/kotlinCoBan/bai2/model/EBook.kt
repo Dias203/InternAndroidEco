@@ -1,5 +1,7 @@
 package kotlinCoBan.bai2.model
 
+import kotlinCoBan.bai2.utils.TypeBook
+
 // class, inheritance
 class EBook(
     title: String,
@@ -10,10 +12,10 @@ class EBook(
 ) : Book(title, author, year, genre) {
 
     // override function
-    override fun getType() = "Sách điện tử"
+    override fun getType() = TypeBook.EBOOK
 
     override fun toString(): String {
-        return "${super.toString()} - kích thước: $sizeMB MB"
+        return "${super.toString()} Kích thước: $sizeMB MB"
     }
 
 }

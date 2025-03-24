@@ -10,8 +10,10 @@ interface LibraryManager {
     // Thêm sách
     fun addBook(book: Book) {}
 
+    suspend fun addWithCoroutine(book: Book) {}
+
     // Hiển thị sách
-    fun displayBooks() {}
+    fun displayBooks(sortBy: ((Book, Book) -> Int)? = null) {}
 
     // Tìm sách theo ID
     fun findBookById(bookId: String): Book? {
@@ -29,9 +31,15 @@ interface LibraryManager {
     fun updateEBook(bookId: String, publishYear: Int, sizeMB: Double) {}
 
 
-    // Xóa sách
-    fun deleteBook(bookId: String): Boolean {
-        return false
+//    // Xóa sách
+//    fun deleteBook(bookId: String): Boolean {
+//        return false
+//    }
+    fun deleteWithCoroutine(bookId: String) {}
+    fun deleteWithCoroutine2(bookId: String) {}
+
+    fun filterBooks(vararg predicates: (Book) -> Boolean): List<Book> {
+        return listOf()
     }
 
     /**=========================================USERS==================================================*/
@@ -76,4 +84,5 @@ interface LibraryManager {
     fun getUserBorrowedBooksCount(userId: String): Int {
         return 0
     }
+
 }

@@ -1,5 +1,7 @@
 package kotlinCoBan.bai2.model
 
+import kotlinCoBan.bai2.utils.TypeBook
+
 class PhysicalBook(
     title: String,
     author: String,
@@ -8,9 +10,9 @@ class PhysicalBook(
     var page: Int
 ) : Book(title, author, year, genre) {
 
-    override fun getType() = "Sách giấy"
+    override fun getType() = TypeBook.PAPER_BOOK
 
     override fun toString(): String {
-        return "${super.toString()} - $page trang"
+        return "${super.toString()} $page trang"
     }
 }

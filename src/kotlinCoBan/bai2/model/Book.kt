@@ -1,11 +1,12 @@
 package kotlinCoBan.bai2.model
 
 import kotlinCoBan.bai2.utils.BookIdGenerator.generateId
+import kotlinCoBan.bai2.utils.TypeBook
 
 // abstract class
 abstract class Book(
     var title: String,
-    var author: String,
+    private var author: String,
     var year: Int,
     private val genre: String,
     val id : String = generateId()
@@ -14,11 +15,14 @@ abstract class Book(
 
     // loại sách
     // abstract function
-    abstract fun getType(): String
+    abstract fun getType() : TypeBook
 
     // override
     override fun toString(): String {
-        return "[$id] - $title - $author - $year - $genre - ${getType()}"
+        return String.format(
+            "| %-5s | %-35s | %-20s | %-4d | %-20s | %-15s |",
+            id, title, author, year, genre, getType()
+        )
     }
 
 }
